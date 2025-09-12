@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedTheme = localStorage.getItem("mf_theme") || "light";
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    darkToggle.checked = false;
+    darkToggle.checked = true;
   }
 
   darkToggle.addEventListener("change", toggleDark);
