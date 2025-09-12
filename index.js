@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedTheme = localStorage.getItem("mf_theme") || "light";
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    darkToggle.checked = true;
+    darkToggle.checked = false;
   }
 
   darkToggle.addEventListener("change", toggleDark);
@@ -510,5 +510,4 @@ document.addEventListener("DOMContentLoaded", () => {
       displayDashboardCards();
     });
   }
-  hello world
 });
