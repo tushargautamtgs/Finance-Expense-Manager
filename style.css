@@ -552,3 +552,141 @@
         input:checked + .slider:before {
           transform: translateX(22px);
         }
+:root {
+  --bg: #f4f6fa;
+  --card: #ffffff;
+  --muted: #7b8093;
+  --accent: #2dd4bf;
+  --accent-2: #0ea5e9;
+  --danger: #fb7185;
+  --text: #0f172a;
+  --glass: rgba(255, 255, 255, 0.6);
+  --scrollbar-bg: rgba(0, 0, 0, 0.05);
+  --scrollbar-thumb: rgba(0, 0, 0, 0.1);
+}
+.dark {
+  --bg: #0b1220;
+  --card: #0f1724;
+  --muted: #97a0b8;
+  --accent: #34d399;
+  --accent-2: #38bdf8;
+  --danger: #fb7185;
+  --text: #e6eef8;
+  --glass: rgba(255, 255, 255, 0.04);
+  --scrollbar-bg: rgba(255, 255, 255, 0.05);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-slide { animation: slideUp 0.7s cubic-bezier(0.6, 0.7, 0, 1.1) both; }
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-scale { animation: scaleIn 0.5s cubic-bezier(0.2, 0.8, 0.4, 1) both; }
+/* ... rest of your CSS remains as you had it ... */
+/* MODALS */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.modal-backdrop.active { display: flex; }
+.modal {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 520px;
+  width: 96%;
+  box-shadow: 0 8px 24px rgba(2,6,23,0.22);
+  animation: fadeIn 0.3s ease;
+  opacity: 0; transform: translateY(-10px); transition: all 0.21s;
+}
+.modal.show { opacity: 1; transform: translateY(0);}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+
+/* Enhanced buttons in accounts section */
+.actions button {
+  margin-left: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  user-select: none;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  background: var(--accent);
+  color: #04202b;
+  min-width: 60px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Specific style for Delete button to stand out */
+.actions button.delete {
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 3px 8px rgba(251, 113, 133, 0.4);
+}
+
+.actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+  background: var(--accent-2);
+  color: #04202b;
+}
+
+/* Hover for Delete button */
+.actions button.delete:hover {
+  background: #f87171; /* lighter shade of danger */
+  box-shadow: 0 10px 30px rgba(251, 113, 133, 0.6);
+  color: white;
+}
+
+/* Optional icon spacing if you want to add icons inside buttons */
+.actions button svg {
+  margin-right: 6px;
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Make sure table cell alignment is consistent */
+.actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Responsive tweak */
+@media (max-width: 600px) {
+  .actions button {
+    font-size: 12px;
+    padding: 6px 8px;
+    min-width: 50px;
+  }
+}

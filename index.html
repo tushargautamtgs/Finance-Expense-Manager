@@ -215,26 +215,51 @@
                 </table>
             </div>
         </section>
-        <section id="view-accounts" class="view" style="display: none">
-            <div class="card fadeIn">
-                <h3>Accounts</h3>
-                <div class="muted">Cash, Bank, Wallet balances (coming soon)</div>
-            </div>
-        </section>
-        <section id="view-reports" class="view" style="display: none">
-            <div class="card fadeIn">
-                <h3>Reports</h3>
-                <div class="muted">Export &amp; advanced analytics (coming soon)</div>
-            </div>
-        </section>
-        <section id="view-settings" class="view" style="display: none">
-            <div class="card fadeIn">
-                <h3>Settings</h3>
-                <div class="muted">Theme, backup &amp; restore</div>
-            </div>
-        </section>
-    </main>
+<section id="view-accounts" class="view" style="display: none">
+  <div class="card fadeIn">
+    <h3>Accounts</h3>
+    <div class="muted">Manage your Cash, Bank, Wallet balances</div>
+    <button class="btn" style="margin-top:12px;" onclick="openAccountModal()">➕ Add Account</button>
+    <div class="tableWrap" style="margin-top:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Balance</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="accountsTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Accounts Modal -->
+<div id="accountModalBackdrop" class="modal-backdrop" onclick="closeAccountModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>Add Account</h3>
+    <div class="row">
+      <input id="acc_name" placeholder="Account Name" />
+      <select id="acc_type">
+        <option value="cash">Cash</option>
+        <option value="bank">Bank</option>
+        <option value="wallet">Wallet</option>
+      </select>
+    </div>
+    <div class="row">
+      <input id="acc_balance" type="number" placeholder="Initial Balance" />
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px">
+      <button onclick="closeAccountModal()" style="background: transparent; padding: 8px 12px; border-radius: 8px">
+        Cancel
+      </button>
+      <button class="btn" onclick="saveAccount()">Save</button>
+    </div>
+  </div>
 </div>
+
 <div
         id="modalBackdrop"
         class="modal-backdrop"
