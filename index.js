@@ -510,4 +510,5 @@ document.addEventListener("DOMContentLoaded", () => {
       displayDashboardCards();
     });
   }
+  hello world
 });
