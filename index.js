@@ -511,3 +511,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// ---- User Profile Logic ----
+let currentUser = localStorage.getItem("username") || null;
+
+function updateUserUI() {
+  const name = currentUser || "Guest";
+  document.getElementById("profileName").textContent = name;
+  document.getElementById("profileGreeting").innerHTML = `Welcome, <strong>${name}</strong>`;
+  document.getElementById("topbarName").textContent = name;
+  document.getElementById("welcomeMsg").textContent = `👋 Welcome, ${name}!`;
+  document.getElementById("avatarInitials").textContent = name.charAt(0).toUpperCase();
+}
+
+function saveUserName() {
+  const input = document.getElementById("usernameInput").value.trim();
+  if (input) {
+    currentUser = input;
+    localStorage.setItem("username", currentUser);
+    updateUserUI();
+    alert("Name updated!");
+  } else {
+    alert("Please enter a valid name.");
+  }
+}
+
+// Init
+updateUserUI();
