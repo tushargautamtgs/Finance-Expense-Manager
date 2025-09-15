@@ -70,6 +70,7 @@
   </aside>
 
   <main class="main">
+    
     <div class="topbar fadeIn" style="gap:24px;">
       <div class="searchBox">
         <input
@@ -142,7 +143,7 @@
                 <div class="muted">Transactions</div>
                 <div class="small">Recent transactions & quick actions</div>
               </div>
-              <div style="display: flex; gap: 8px; align-items: center">
+              <div style=" display: flex; gap: 8px; align-items: center">
                 <select id="monthFilter" onchange="displayTransactions()">
                   <option value="">All months</option>
                 </select>
@@ -195,6 +196,10 @@
           </div>
           <div style="display: flex; gap: 8px; align-items: center">
             <input
+              style="
+              padding: 6px 4px;
+              border-radius: 8px;
+              border-color: rgb(56, 183, 192);"
               id="txSearch"
               placeholder="Search description..."
               oninput="displayTransactions()"
