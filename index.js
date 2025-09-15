@@ -52,7 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ===== Utils and Storage =====
 function formatCurrency(n) {
-  return "₹" + Number(n || 0).toLocaleString("en-IN", { maximumFractionDigits: 2 });
+  return (
+    "₹" + Number(n || 0).toLocaleString("en-IN", { maximumFractionDigits: 2 })
+  );
 }
 function saveAllToStorage() {
   localStorage.setItem("mf_transactions", JSON.stringify(transactions));
@@ -61,10 +63,12 @@ function saveAllToStorage() {
 
 // ===== Navigation =====
 function switchView(btn) {
-  document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+  document
+    .querySelectorAll(".nav button")
+    .forEach((b) => b.classList.remove("active"));
   btn.classList.add("active");
   const view = btn.dataset.view;
-  document.querySelectorAll(".view").forEach(v => (v.style.display = "none"));
+  document.querySelectorAll(".view").forEach((v) => (v.style.display = "none"));
   document.getElementById("view-" + view).style.display = "block";
 }
 
@@ -73,7 +77,8 @@ function openModal(defaultDate) {
   editIndex = null;
   currentCategoryFilter = "";
   document.getElementById("modalTitle").innerText = "Add Transaction";
-  document.getElementById("m_date").value = defaultDate || new Date().toISOString().slice(0, 10);
+  document.getElementById("m_date").value =
+    defaultDate || new Date().toISOString().slice(0, 10);
   document.getElementById("m_type").value = "expense";
   document.getElementById("m_desc").value = "";
   document.getElementById("m_amount").value = "";
@@ -89,7 +94,10 @@ function showModal() {
 function closeModal(e) {
   if (e && e.type === "click" && e.target.id !== "modalBackdrop") return;
   document.getElementById("modal").classList.remove("show");
-  setTimeout(() => (document.getElementById("modalBackdrop").style.display = "none"), 200);
+  setTimeout(
+    () => (document.getElementById("modalBackdrop").style.display = "none"),
+    200
+  );
 }
 function editTransaction(idx) {
   const t = transactions[idx];
@@ -139,20 +147,29 @@ function deleteTx(idx) {
 
 // ===== Month Filters and Transactions Listing =====
 function initMonthFilters() {
-  const months = Array.from(new Set(transactions.map(t => t.date.slice(0, 7)))).sort().reverse();
+  const months = Array.from(
+    new Set(transactions.map((t) => t.date.slice(0, 7)))
+  )
+    .sort()
+    .reverse();
   const monthFilter = document.getElementById("monthFilter");
   const txMonth = document.getElementById("txMonth");
-  [monthFilter, txMonth].forEach(s => {
+  [monthFilter, txMonth].forEach((s) => {
     s.innerHTML = '<option value="">All months</option>';
-    months.forEach(m => {
+    months.forEach((m) => {
       const opt = document.createElement("option");
-      opt.value = m; opt.text = m;
+      opt.value = m;
+      opt.text = m;
       s.appendChild(opt);
     });
   });
 }
 function displayCategoryFilters() {
-  const categories = [...new Set(transactions.filter(t => t.type === "expense").map(t => t.category))];
+  const categories = [
+    ...new Set(
+      transactions.filter((t) => t.type === "expense").map((t) => t.category)
+    ),
+  ];
   const container = document.getElementById("categoryFilters");
   container.innerHTML = "";
   const allBtn = document.createElement("button");
@@ -164,7 +181,7 @@ function displayCategoryFilters() {
     displayCategoryFilters();
   };
   container.appendChild(allBtn);
-  categories.forEach(cat => {
+  categories.forEach((cat) => {
     const btn = document.createElement("button");
     btn.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
     btn.classList.add(currentCategoryFilter === cat ? "active" : "");
@@ -181,12 +198,27 @@ function displayTransactions(resetPage = false) {
   initMonthFilters();
   const tb = document.getElementById("transactionsTbody");
   const txTbody = document.getElementById("txTbody");
-  const search = (document.getElementById("txSearch")?.value || document.getElementById("globalSearch").value || "").toLowerCase();
-  const month = (document.getElementById("monthFilter")?.value || document.getElementById("txMonth")?.value || "");
-  let filtered = transactions.filter(t => {
+  const search = (
+    document.getElementById("txSearch")?.value ||
+    document.getElementById("globalSearch").value ||
+    ""
+  ).toLowerCase();
+  const month =
+    document.getElementById("monthFilter")?.value ||
+    document.getElementById("txMonth")?.value ||
+    "";
+  let filtered = transactions.filter((t) => {
     if (month && !t.date.startsWith(month)) return false;
-    if (search && !(t.desc.toLowerCase().includes(search) || t.category.toLowerCase().includes(search))) return false;
-    if (currentCategoryFilter && t.category !== currentCategoryFilter) return false;
+    if (
+      search &&
+      !(
+        t.desc.toLowerCase().includes(search) ||
+        t.category.toLowerCase().includes(search)
+      )
+    )
+      return false;
+    if (currentCategoryFilter && t.category !== currentCategoryFilter)
+      return false;
     return true;
   });
   const total = filtered.length;
@@ -204,7 +236,9 @@ function displayTransactions(resetPage = false) {
       <td>${t.category}</td>
       <td>${t.account}</td>
       <td>${t.type}</td>
-      <td style="text-align:right"><strong>${formatCurrency(t.amount)}</strong></td>
+      <td style="text-align:right"><strong>${formatCurrency(
+        t.amount
+      )}</strong></td>
       <td class="actions">
         <button onclick="editTransaction(${globalIdx})">Edit</button>
         <button onclick="deleteTx(${globalIdx})" style="background:transparent; color:var(--danger)">Delete</button>
@@ -221,7 +255,9 @@ function displayTransactions(resetPage = false) {
         <td>${t.category}</td>
         <td>${t.account}</td>
         <td>${t.type}</td>
-        <td style="text-align:right"><strong>${formatCurrency(t.amount)}</strong></td>
+        <td style="text-align:right"><strong>${formatCurrency(
+          t.amount
+        )}</strong></td>
         <td class="actions">
           <button onclick="editTransaction(${idx})">Edit</button>
           <button onclick="deleteTx(${idx})" style="background:transparent; color:var(--danger)">Delete</button>
@@ -229,7 +265,9 @@ function displayTransactions(resetPage = false) {
       txTbody.appendChild(row);
     });
   }
-  document.getElementById("tableInfo").innerText = `${total} transaction${total !== 1 ? "s" : ""}`;
+  document.getElementById("tableInfo").innerText = `${total} transaction${
+    total !== 1 ? "s" : ""
+  }`;
   document.getElementById("pageInfo").innerText = `${currentPage} / ${pages}`;
   updateCharts();
   displayDashboardCards();
@@ -250,24 +288,45 @@ function nextPage() {
 // ===== Dashboard Cards =====
 function displayDashboardCards() {
   const monthFilter = document.getElementById("monthFilter");
-  const monthNow = monthFilter && monthFilter.value ? monthFilter.value : new Date().toISOString().slice(0, 7);
-  let income = 0, expense = 0;
-  transactions.forEach(t => {
-    if (t.type === "income" && (monthFilter && monthFilter.value ? t.date.startsWith(monthFilter.value) : t.date.startsWith(monthNow))) income += t.amount;
-    if (t.type === "expense" && (monthFilter && monthFilter.value ? t.date.startsWith(monthFilter.value) : t.date.startsWith(monthNow))) expense += t.amount;
+  const monthNow =
+    monthFilter && monthFilter.value
+      ? monthFilter.value
+      : new Date().toISOString().slice(0, 7);
+  let income = 0,
+    expense = 0;
+  transactions.forEach((t) => {
+    if (
+      t.type === "income" &&
+      (monthFilter && monthFilter.value
+        ? t.date.startsWith(monthFilter.value)
+        : t.date.startsWith(monthNow))
+    )
+      income += t.amount;
+    if (
+      t.type === "expense" &&
+      (monthFilter && monthFilter.value
+        ? t.date.startsWith(monthFilter.value)
+        : t.date.startsWith(monthNow))
+    )
+      expense += t.amount;
   });
 
   document.getElementById("cardIncome").innerText = formatCurrency(income);
   document.getElementById("cardExpense").innerText = formatCurrency(expense);
-  document.getElementById("cardBalance").innerText = formatCurrency(income - expense);
+  document.getElementById("cardBalance").innerText = formatCurrency(
+    income - expense
+  );
 
   // Calculate total wealth (all time)
-  let totalIncome = 0, totalExpense = 0;
-  transactions.forEach(t => {
+  let totalIncome = 0,
+    totalExpense = 0;
+  transactions.forEach((t) => {
     if (t.type === "income") totalIncome += t.amount;
     if (t.type === "expense") totalExpense += t.amount;
   });
-  document.getElementById("cardTotalWealth").innerText = formatCurrency(totalIncome - totalExpense);
+  document.getElementById("cardTotalWealth").innerText = formatCurrency(
+    totalIncome - totalExpense
+  );
 
   displayFundsDistribution();
 }
@@ -281,44 +340,55 @@ function initCharts() {
     type: "pie",
     data: {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [
-          '#60a5fa', '#34d399', '#fbbf24', '#fb7185',
-          '#a78bfa', '#f97316', '#f59e0b', '#10b981', '#3b82f6'
-        ]
-      }]
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [
+            "#60a5fa",
+            "#34d399",
+            "#fbbf24",
+            "#fb7185",
+            "#a78bfa",
+            "#f97316",
+            "#f59e0b",
+            "#10b981",
+            "#3b82f6",
+          ],
+        },
+      ],
     },
     options: {
       responsive: true,
       plugins: { legend: { position: "bottom" } },
-      animation: { duration: 600, easing: "easeOutCubic" }
-    }
+      animation: { duration: 600, easing: "easeOutCubic" },
+    },
   });
 
   monthlyChart = new Chart(ctx2, {
     type: "line",
     data: {
       labels: [],
-      datasets: [{
-        label: "Net (Income - Expense)",
-        data: [],
-        borderColor: "#06b6d4",
-        tension: 0.3,
-        fill: true,
-        backgroundColor: "rgba(6,182,212,0.08)",
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        borderWidth: 3,
-      }]
+      datasets: [
+        {
+          label: "Net (Income - Expense)",
+          data: [],
+          borderColor: "#06b6d4",
+          tension: 0.3,
+          fill: true,
+          backgroundColor: "rgba(6,182,212,0.08)",
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 3,
+        },
+      ],
     },
     options: {
       responsive: true,
       plugins: { legend: { display: false } },
       scales: { x: { display: true }, y: { display: true, beginAtZero: true } },
       interaction: { mode: "nearest", intersect: false },
-      animation: { duration: 700, easing: "easeOutQuart" }
-    }
+      animation: { duration: 700, easing: "easeOutQuart" },
+    },
   });
 
   updateCharts();
@@ -326,20 +396,21 @@ function initCharts() {
 function updateCharts() {
   const catTotals = {};
   const monthlyMap = {};
-  transactions.forEach(t => {
-    if (t.type === "expense") catTotals[t.category] = (catTotals[t.category] || 0) + t.amount;
+  transactions.forEach((t) => {
+    if (t.type === "expense")
+      catTotals[t.category] = (catTotals[t.category] || 0) + t.amount;
     const m = t.date.slice(0, 7);
     monthlyMap[m] = monthlyMap[m] || 0;
     monthlyMap[m] += t.type === "income" ? t.amount : -t.amount;
   });
   const catLabels = Object.keys(catTotals);
   categoryChart.data.labels = catLabels;
-  categoryChart.data.datasets[0].data = catLabels.map(l => catTotals[l]);
+  categoryChart.data.datasets[0].data = catLabels.map((l) => catTotals[l]);
   categoryChart.update();
 
   const months = Object.keys(monthlyMap).sort();
   monthlyChart.data.labels = months;
-  monthlyChart.data.datasets[0].data = months.map(m => monthlyMap[m]);
+  monthlyChart.data.datasets[0].data = months.map((m) => monthlyMap[m]);
   monthlyChart.update();
 }
 
@@ -349,7 +420,7 @@ function searchAll() {
 }
 
 // ===== Esc key to close Modal =====
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeModal({ type: "click", target: { id: "modalBackdrop" } });
     closeAccountModal({ target: { id: "accountModalBackdrop" } });
@@ -451,7 +522,7 @@ function editAccount(index) {
     acc.name = document.getElementById("acc_name").value.trim();
     acc.type = document.getElementById("acc_type").value;
     acc.balance = parseFloat(document.getElementById("acc_balance").value) || 0;
-    
+
     saveAllToStorage();
     displayAccounts();
     closeAccountModal();
@@ -462,14 +533,25 @@ function editAccount(index) {
 // ===== Dark Mode Toggle =====
 function toggleDark() {
   document.body.classList.toggle("dark");
-  localStorage.setItem("mf_theme", document.body.classList.contains("dark") ? "dark" : "light");
+  localStorage.setItem(
+    "mf_theme",
+    document.body.classList.contains("dark") ? "dark" : "light"
+  );
 }
 
 // ===== Utility Function =====
 function escapeHtml(text) {
-  return text.replace(/[&<>"']/g, c => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-  }[c]));
+  return text.replace(
+    /[&<>"']/g,
+    (c) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[c])
+  );
 }
 
 // ===== Funds Distribution Placeholder =====
@@ -518,10 +600,14 @@ let currentUser = localStorage.getItem("username") || null;
 function updateUserUI() {
   const name = currentUser || "Guest";
   document.getElementById("profileName").textContent = name;
-  document.getElementById("profileGreeting").innerHTML = `Welcome, <strong>${name}</strong>`;
+  document.getElementById(
+    "profileGreeting"
+  ).innerHTML = `Welcome, <strong>${name}</strong>`;
   document.getElementById("topbarName").textContent = name;
   document.getElementById("welcomeMsg").textContent = `👋 Welcome, ${name}!`;
-  document.getElementById("avatarInitials").textContent = name.charAt(0).toUpperCase();
+  document.getElementById("avatarInitials").textContent = name
+    .charAt(0)
+    .toUpperCase();
 }
 
 function saveUserName() {
