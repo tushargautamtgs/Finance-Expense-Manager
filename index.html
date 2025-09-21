@@ -1,343 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Finance Dashboard — My Finance Portal</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-<!-- Welcome screen -->
-<div
-  id="welcomeScreen"
-  style="
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(120deg, var(--accent), var(--accent-2));
-    color: white;
-    z-index: 999;
-    font-size: 2.6rem;
-    letter-spacing: 0.05em;
-    transition: opacity 0.8s;
-  "
->
-  <div>
-    <h1 id="welcomeMsg" style="margin-bottom: 8px; font-size: 2.6rem">
-      👋 Welcome, User!
-    </h1>
-    <div style="font-size: 1.1rem">Your Finance Dashboard is loading...</div>
-  </div>
-</div>
-
-<div id="root" class="app">
-  <aside class="sidebar fadeIn" id="sidebar">
-    <div class="brand">
-      <div class="logo">MF</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Finance Dashboard — My Finance Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Welcome screen -->
+    <div
+      id="welcomeScreen"
+      style="
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(120deg, var(--accent), var(--accent-2));
+        color: white;
+        z-index: 999;
+        font-size: 2.6rem;
+        letter-spacing: 0.05em;
+        transition: opacity 0.8s;
+      "
+    >
       <div>
-        <h3>My Finance</h3>
-        <div class="muted" style="font-size: 12px">Personal Dashboard</div>
-      </div>
-    </div>
-    <nav class="nav" id="nav">
-      <button
-        class="active"
-        data-view="dashboard"
-        onclick="switchView(this)"
-      >Dashboard</button>
-      <button data-view="transactions" onclick="switchView(this)">Transactions</button>
-      <button data-view="accounts" onclick="switchView(this)">Accounts</button>
-      <button data-view="reports" onclick="switchView(this)">Reports</button>
-      <button data-view="settings" onclick="switchView(this)">Settings</button>
-      <!-- New Profile Button -->
-
-
-      
-      
-    </nav>
-    <hr style="margin: 14px 0; opacity: 0.06" />
-    <div>
-      <div class="muted" style="font-size: 12px; margin-bottom: 8px">
-        Quick Actions
-      </div>
-      <button class="btn" onclick="openModal()">➕ Add Transaction</button>
-    </div>
-  </aside>
-
-  <main class="main">
-    
-    <div class="topbar fadeIn" style="gap:24px;">
-      <div class="searchBox">
-        <input
-          type="search"
-          id="globalSearch"
-          placeholder="Search transactions, descriptions..."
-          oninput="searchAll()"
-        />
-        
-      </div>
-      <div style="display:flex; align-items:center; gap:24px;">
-      <button style=
-      
-      "border-radius: 5px; background-color:rgb(137, 241, 241); box-sizing:content-box;"
-
-       data-view="profile" onclick="switchView(this)">
-        👤 <span id="profileName">Guest</span>
-      </button>
-        <label class="toggle-switch" title="Toggle Dark / Light Mode">
-          <input type="checkbox" id="darkModeToggle">
-          <span class="slider"></span>
-        </label>
-        
-        <div class="center">
-          <div class="muted right">Hi, <strong id="topbarName">Guest</strong></div>
-          <div class="avatar" id="avatarInitials">G</div>
+        <h1 id="welcomeMsg" style="margin-bottom: 8px; font-size: 2.6rem">
+          👋 Welcome, User!
+        </h1>
+        <div style="font-size: 1.1rem">
+          Your Finance Dashboard is loading...
         </div>
       </div>
     </div>
 
-    <!-- Dashboard -->
-    <section id="view-dashboard" class="view fadeIn">
-      <div class="grid animate-slide">
-        <div class="card animate-scale">
-          <h4>Total Income</h4>
-          <div class="value" id="cardIncome">₹0</div>
-          <div class="trend"><span class="muted">This month</span></div>
-        </div>
-        <div class="card animate-scale">
-          <h4>Total Expense</h4>
-          <div class="value" id="cardExpense">₹0</div>
-          <div class="trend"><span class="muted">This month</span></div>
-        </div>
-        <div class="card animate-scale">
-          <h4>Balance</h4>
-          <div class="value" id="cardBalance">₹0</div>
-          <div class="trend"><span class="muted">Income − Expense</span></div>
-        </div>
-        <div class="card animate-scale">
-          <h4>Total Wealth</h4>
-          <div class="value" id="cardTotalWealth">₹0</div>
-          <div class="trend"><span class="muted">All time balance</span></div>
-        </div>
-      </div>
-
-      <!-- Category filters -->
-      <div id="categoryFilters"></div>
-      <div id="chartsContainer">
-        <div class="layout" style="margin-top: 12px">
-          <div class="chartWrap card animate-scale">
-            <h4 style="margin-top: 0">Monthly Balance Trend</h4>
-            <canvas id="monthlyChart" height="180"></canvas>
-            <hr style="margin: 12px 0; opacity: 0.06" />
-            <h4 style="margin: 0">Spending by Category</h4>
-            <canvas id="categoryChart" height="160"></canvas>
+    <div id="root" class="app">
+      <aside class="sidebar fadeIn" id="sidebar">
+        <div class="brand">
+          <div class="logo">MF</div>
+          <div>
+            <h3>My Finance</h3>
+            <div class="muted" style="font-size: 12px">Personal Dashboard</div>
           </div>
-          <div class="tableWrap card animate-scale">
+        </div>
+        <nav class="nav" id="nav">
+          <button
+            class="active"
+            data-view="dashboard"
+            onclick="switchView(this)"
+          >
+            Dashboard
+          </button>
+          <button data-view="transactions" onclick="switchView(this)">
+            Transactions
+          </button>
+          <button data-view="accounts" onclick="switchView(this)">
+            Accounts
+          </button>
+          <button data-view="reports" onclick="switchView(this)">
+            Reports
+          </button>
+          <button data-view="settings" onclick="switchView(this)">
+            Settings
+          </button>
+        </nav>
+        <hr style="margin: 14px 0; opacity: 0.06" />
+        <div>
+          <div class="muted" style="font-size: 12px; margin-bottom: 8px">
+            Quick Actions
+          </div>
+          <button class="btn" onclick="openModal()">➕ Add Transaction</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="topbar fadeIn" style="gap: 24px">
+          <div class="searchBox">
+            <input
+            style="border-radius: 5px; border-color: black ; padding: 10px 7px;"
+              type="search"
+              id="globalSearch"
+              placeholder="Search transactions, descriptions..."
+              oninput="searchAll()"
+            />
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px">
+            <button
+              style="
+                border-radius: 5px;
+                background-color: rgb(137, 241, 241);
+                box-sizing: content-box;
+              "
+              data-view="profile"
+              onclick="switchView(this)"
+            >
+              👤 <span id="profileName">Guest</span>
+            </button>
+            <label class="toggle-switch" title="Toggle Dark / Light Mode">
+              <input type="checkbox" id="darkModeToggle" />
+              <span class="slider"></span>
+            </label>
+
+            <div class="center">
+              <div class="muted right">
+                Hi, <strong id="topbarName">Guest</strong>
+              </div>
+              <div class="avatar" id="avatarInitials">G</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard -->
+        <section id="view-dashboard" class="view fadeIn">
+          <div class="grid animate-slide">
+            <div class="card animate-scale">
+              <h4>Total Income</h4>
+              <div class="value" id="cardIncome">₹0</div>
+              <div class="trend"><span class="muted">This month</span></div>
+            </div>
+            <div class="card animate-scale">
+              <h4>Total Expense</h4>
+              <div class="value" id="cardExpense">₹0</div>
+              <div class="trend"><span class="muted">This month</span></div>
+            </div>
+            <div class="card animate-scale">
+              <h4>Balance</h4>
+              <div class="value" id="cardBalance">₹0</div>
+              <div class="trend">
+                <span class="muted">Income − Expense</span>
+              </div>
+            </div>
+            <div class="card animate-scale">
+              <h4>Total Wealth</h4>
+              <div class="value" id="cardTotalWealth">₹0</div>
+              <div class="trend">
+                <span class="muted">All time balance</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category filters -->
+          <div id="categoryFilters"></div>
+          <div id="chartsContainer">
+            <div class="layout" style="margin-top: 12px">
+              <div class="chartWrap card animate-scale">
+                <h4 style="margin-top: 0">Monthly Balance Trend</h4>
+                <canvas id="monthlyChart" height="180"></canvas>
+                <hr style="margin: 12px 0; opacity: 0.06" />
+                <h4 style="margin: 0">Spending by Category</h4>
+                <canvas id="categoryChart" height="160"></canvas>
+              </div>
+              <div class="tableWrap card animate-scale">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 8px;
+                  "
+                >
+                  <div>
+                    <div class="muted">Transactions</div>
+                    <div class="small">Recent transactions & quick actions</div>
+                  </div>
+                  <div style="display: flex; gap: 8px; align-items: center">
+                    <select id="monthFilter" onchange="displayTransactions()">
+                      <option value="">All months</option>
+                    </select>
+                    <button class="btn" onclick="openModal()">New</button>
+                  </div>
+                </div>
+                <div id="transactionsTableContainer">
+                  <table id="transactionsTable">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Account</th>
+                        <th>Type</th>
+                        <th class="right">Amount</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="transactionsTbody"></tbody>
+                  </table>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 12px;
+                  "
+                >
+                  <div class="muted" id="tableInfo">0 transactions</div>
+                  <div>
+                    <button style="border-radius: 5px; background-color: rgb(87, 205, 209);" onclick="prevPage()">Prev</button>
+                    <span id="pageInfo" style="padding: 0 8px">1</span>
+                    <button style="border-radius: 5px; background-color: rgb(87, 205, 209);" onclick="nextPage()">Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Transactions -->
+        <section id="view-transactions" class="view" style="display: none">
+          <div class="card fadeIn">
             <div
               style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                gap: 12px;
-                margin-bottom: 8px;
               "
             >
               <div>
-                <div class="muted">Transactions</div>
-                <div class="small">Recent transactions & quick actions</div>
+                <h3 style="margin: 0">All Transactions</h3>
+                <div class="muted">
+                  Manage your entries — edit, delete, filter
+                </div>
               </div>
-              <div style=" display: flex; gap: 8px; align-items: center">
-                <select id="monthFilter" onchange="displayTransactions()">
+              <div style="display: flex; gap: 8px; align-items: center">
+                <input
+                  style="
+                    padding: 6px 4px;
+                    border-radius: 8px;
+                    border-color: rgb(56, 183, 192);
+                  "
+                  id="txSearch"
+                  placeholder="Search description..."
+                  oninput="displayTransactions()"
+                />
+                <select id="txMonth" onchange="displayTransactions()">
                   <option value="">All months</option>
                 </select>
-                <button class="btn" onclick="openModal()">New</button>
+                <button class="btn" onclick="openModal()">
+                  Add Transaction
+                </button>
               </div>
             </div>
-            <div id="transactionsTableContainer">
-              <table id="transactionsTable">
+          </div>
+          <div class="card tableWrap" style="margin-top: 12px">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th class="right">Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="txTbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Accounts -->
+        <section id="view-accounts" class="view" style="display: none">
+          <div class="card fadeIn">
+            <h3>Accounts</h3>
+            <div class="muted">Manage your Cash, Bank, Wallet balances</div>
+            <button
+              class="btn"
+              style="margin-top: 12px"
+              onclick="openAccountModal()"
+            >
+              ➕ Add Account
+            </button>
+            <div class="tableWrap" style="margin-top: 12px">
+              <table>
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Account</th>
+                    <th>Name</th>
                     <th>Type</th>
-                    <th class="right">Amount</th>
+                    <th>Balance</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody id="transactionsTbody"></tbody>
+                <tbody id="accountsTbody"></tbody>
               </table>
             </div>
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 12px;
-              "
-            >
-              <div class="muted" id="tableInfo">0 transactions</div>
-              <div>
-                <button onclick="prevPage()">Prev</button>
-                <span id="pageInfo" style="padding: 0 8px">1</span>
-                <button onclick="nextPage()">Next</button>
-              </div>
+          </div>
+        </section>
+
+        <!-- Profile -->
+        <section id="view-profile" class="view" style="display: none">
+          <div class="card fadeIn">
+            <h3>Profile</h3>
+            <p id="profileGreeting">Welcome, <strong>Guest</strong></p>
+            <div style="margin-top: 12px">
+              <label for="usernameInput">Enter your name:</label><br />
+              <input id="usernameInput" placeholder="Your name" />
+              <button
+                class="btn"
+                style="margin-left: 8px"
+                onclick="saveUserName()"
+              >
+                Save
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      </main>
+    </div>
 
-    <!-- Transactions -->
-    <section id="view-transactions" class="view" style="display: none">
-      <div class="card fadeIn">
-        <div style="display: flex; justify-content: space-between; align-items: center">
-          <div>
-            <h3 style="margin: 0">All Transactions</h3>
-            <div class="muted">Manage your entries — edit, delete, filter</div>
-          </div>
-          <div style="display: flex; gap: 8px; align-items: center">
-            <input
-              style="
-              padding: 6px 4px;
+    <!-- Accounts Modal -->
+    <div
+      id="accountModalBackdrop"
+      class="modal-backdrop"
+      onclick="closeAccountModal(event)"
+    >
+      <div class="modal" onclick="event.stopPropagation()">
+        <h3>Add Account</h3>
+        <div class="row">
+          <input id="acc_name" placeholder="Account Name" />
+          <select id="acc_type">
+            <option value="cash">Cash</option>
+            <option value="bank">Bank</option>
+            <option value="wallet">Wallet</option>
+          </select>
+        </div>
+        <div class="row">
+          <input id="acc_balance" type="number" placeholder="Initial Balance" />
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 12px;
+          "
+        >
+          <button
+            onclick="closeAccountModal()"
+            style="
+              background: transparent;
+              padding: 8px 12px;
               border-radius: 8px;
-              border-color: rgb(56, 183, 192);"
-              id="txSearch"
-              placeholder="Search description..."
-              oninput="displayTransactions()"
-            />
-            <select id="txMonth" onchange="displayTransactions()">
-              <option value="">All months</option>
-            </select>
-            <button class="btn" onclick="openModal()">Add Transaction</button>
-          </div>
+            "
+          >
+            Cancel
+          </button>
+          <button class="btn" onclick="saveAccount()">Save</button>
         </div>
       </div>
-      <div class="card tableWrap" style="margin-top: 12px">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Account</th>
-              <th>Type</th>
-              <th class="right">Amount</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="txTbody"></tbody>
-        </table>
-      </div>
-    </section>
+    </div>
 
-    <!-- Accounts -->
-    <section id="view-accounts" class="view" style="display: none">
-      <div class="card fadeIn">
-        <h3>Accounts</h3>
-        <div class="muted">Manage your Cash, Bank, Wallet balances</div>
-        <button class="btn" style="margin-top:12px;" onclick="openAccountModal()">➕ Add Account</button>
-        <div class="tableWrap" style="margin-top:12px;">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Balance</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="accountsTbody"></tbody>
-          </table>
+    <!-- Transaction Modal -->
+    <div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
+      <div id="modal" class="modal" onclick="event.stopPropagation()">
+        <h3 id="modalTitle">Add Transaction</h3>
+        <div class="row">
+          <input id="m_date" type="date" />
+          <select id="m_type">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+        <div class="row">
+          <input id="m_desc" placeholder="Description (e.g., Salary, Rent)" />
+          <input id="m_amount" type="number" placeholder="Amount" />
+        </div>
+        <div class="row">
+          <select id="m_category">
+            <option value="general">General</option>
+            <option value="food">Food</option>
+            <option value="rent">Rent</option>
+            <option value="shopping">Shopping</option>
+            <option value="travel">Travel</option>
+            <option value="salary">Salary</option>
+          </select>
+          <select id="m_account">
+            <option value="cash">Cash</option>
+            <option value="bank">Bank</option>
+            <option value="wallet">Wallet</option>
+          </select>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 12px;
+          "
+        >
+          <button
+            onclick="closeModal()"
+            style="
+              background: transparent;
+              padding: 8px 12px;
+              border-radius: 8px;
+            "
+          >
+            Cancel
+          </button>
+          <button class="btn" onclick="saveTransaction()">Save</button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Profile -->
-    <section id="view-profile" class="view" style="display:none">
-      <div class="card fadeIn">
-        <h3>Profile</h3>
-        <p id="profileGreeting">Welcome, <strong>Guest</strong></p>
-        <div style="margin-top:12px;">
-          <label for="usernameInput">Enter your name:</label><br>
-          <input id="usernameInput" placeholder="Your name" />
-          <button class="btn" style="margin-left:8px;" onclick="saveUserName()">Save</button>
-        </div>
-      </div>
-    </section>
-  </main>
-</div>
-
-<!-- Accounts Modal -->
-<div id="accountModalBackdrop" class="modal-backdrop" onclick="closeAccountModal(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h3>Add Account</h3>
-    <div class="row">
-      <input id="acc_name" placeholder="Account Name" />
-      <select id="acc_type">
-        <option value="cash">Cash</option>
-        <option value="bank">Bank</option>
-        <option value="wallet">Wallet</option>
-      </select>
-    </div>
-    <div class="row">
-      <input id="acc_balance" type="number" placeholder="Initial Balance" />
-    </div>
-    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px">
-      <button onclick="closeAccountModal()" style="background: transparent; padding: 8px 12px; border-radius: 8px">
-        Cancel
-      </button>
-      <button class="btn" onclick="saveAccount()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- Transaction Modal -->
-<div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
-  <div id="modal" class="modal" onclick="event.stopPropagation()">
-    <h3 id="modalTitle">Add Transaction</h3>
-    <div class="row">
-      <input id="m_date" type="date" />
-      <select id="m_type">
-        <option value="expense">Expense</option>
-        <option value="income">Income</option>
-      </select>
-    </div>
-    <div class="row">
-      <input id="m_desc" placeholder="Description (e.g., Salary, Rent)" />
-      <input id="m_amount" type="number" placeholder="Amount" />
-    </div>
-    <div class="row">
-      <select id="m_category">
-        <option value="general">General</option>
-        <option value="food">Food</option>
-        <option value="rent">Rent</option>
-        <option value="shopping">Shopping</option>
-        <option value="travel">Travel</option>
-        <option value="salary">Salary</option>
-      </select>
-      <select id="m_account">
-        <option value="cash">Cash</option>
-        <option value="bank">Bank</option>
-        <option value="wallet">Wallet</option>
-      </select>
-    </div>
-    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px">
-      <button
-        onclick="closeModal()"
-        style="background: transparent; padding: 8px 12px; border-radius: 8px"
-      >
-        Cancel
-      </button>
-      <button class="btn" onclick="saveTransaction()">Save</button>
-    </div>
-  </div>
-</div>
-
-<script src="index.js"></script>
-</body>
+    <script src="index.js"></script>
+  </body>
 </html>
