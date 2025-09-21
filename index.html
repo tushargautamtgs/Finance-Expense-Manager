@@ -53,9 +53,7 @@
       <button data-view="reports" onclick="switchView(this)">Reports</button>
       <button data-view="settings" onclick="switchView(this)">Settings</button>
       <!-- New Profile Button -->
-      <button data-view="profile" onclick="switchView(this)">
-        👤 <span id="profileName">Guest</span>
-      </button>
+
 
       
       
@@ -79,13 +77,21 @@
           placeholder="Search transactions, descriptions..."
           oninput="searchAll()"
         />
+        
       </div>
       <div style="display:flex; align-items:center; gap:24px;">
-        <button id="toggleChartsBtn" class="btn" onclick="toggleCharts()">Hide Charts</button>
+      <button style=
+      
+      "border-radius: 5px; background-color:rgb(137, 241, 241); box-sizing:content-box;"
+
+       data-view="profile" onclick="switchView(this)">
+        👤 <span id="profileName">Guest</span>
+      </button>
         <label class="toggle-switch" title="Toggle Dark / Light Mode">
           <input type="checkbox" id="darkModeToggle">
           <span class="slider"></span>
         </label>
+        
         <div class="center">
           <div class="muted right">Hi, <strong id="topbarName">Guest</strong></div>
           <div class="avatar" id="avatarInitials">G</div>
