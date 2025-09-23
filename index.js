@@ -427,7 +427,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// ===== Chart Toggle =====
+// ===== Chart Toggle update =====
 function toggleCharts() {
   const chartsContainer = document.getElementById("chartsContainer");
   const toggleBtn = document.getElementById("toggleChartsBtn");
@@ -624,8 +624,3 @@ function saveUserName() {
 
 // Init
 updateUserUI();
-
-function toggleSidebar() {
-  document.getElementById("sidebar").classList.toggle("open");
-  document.getElementById("overlay").classList.toggle("show");
-}
