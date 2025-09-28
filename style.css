@@ -406,7 +406,7 @@
           position: fixed;
           inset: 0;
           display: none;
-          background: rgba(0, 0, 0, 0.4);
+          background: rgba(17, 16, 16, 0.4);
           align-items: center;
           justify-content: center;
           z-index: 40;
