@@ -344,7 +344,7 @@
           text-transform: uppercase;
         }
         tr:hover td {
-          background: rgba(0, 0, 0, 0.02);
+          background: rgba(12, 11, 11, 0.02);
         }
         .actions button {
           margin-left: 8px;
@@ -355,12 +355,12 @@
           font-weight: 700;
           font-size: 12px;
           background: transparent;
-          transition: background 0.2s;
+          transition: background 0.3s;
           user-select: none;
         }
         .actions button:hover {
           background: var(--danger);
-          color: white;
+          color: rgb(243, 225, 225);
         }
         .pill {
           display: inline-block;
